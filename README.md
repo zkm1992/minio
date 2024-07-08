@@ -1,6 +1,6 @@
 # minio测试demo
 
-使用了github上的**spring-boot-starter-minio**，亲测可用
+使用了github上的==**spring-boot-starter-minio**==，亲测可用
 
 上传、下载、删除、获取文件列表，均有demo，可以直接拿去使用
 
