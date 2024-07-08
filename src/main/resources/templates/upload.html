@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>File Upload</title>
+</head>
+<body>
+<form id="uploadForm" action="http://localhost:8080/files/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="file"/>
+    <input type="submit" value="Upload"/>
+</form>
+
+<div id="progress" style="display: none;">
+    <progress id="progressBar" max="100" value="0"></progress>
+    <span id="percentage">0%</span>
+</div>
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const fileInput = document.getElementById('file');
+        const file = fileInput.files[0];
+        if (!file) {
+            alert('Please choose a file.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:8080/files/upload', true);
+
+        xhr.upload.onprogress = function (e) {
+            if (e.lengthComputable) {
+                const percentage = Math.round((e.loaded / e.total) * 100);
+                document.getElementById('progressBar').value = percentage;
+                document.getElementById('percentage').innerText = percentage + '%';
+            }
+        };
+
+        xhr.onload = function () {
+            document.getElementById('progress').style.display = 'none';
+            alert('Upload success!');
+        };
+
+        xhr.onerror = function () {
+            alert('Upload failed!');
+        };
+
+        xhr.send(formData);
+
+        document.getElementById('progress').style.display = 'block';
+    });
+</script>
+</body>
+</html>
